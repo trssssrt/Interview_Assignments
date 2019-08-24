@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hello, World! Page</title>
+<title>Rebellion Challenge!</title>
 </head>
 <body>
 	<?php
@@ -26,7 +26,7 @@
 			}
 
 			$n = abs($number);
-			$i = 2;
+			$i = 3;
 
 			/**
 			 * Elementary abstract algebra says that sqrt($num)
@@ -46,7 +46,7 @@
 		function nextPrimes($number, $count = 126) {
 			$nextP = array();
 			//Keep looping until we have an array of 10 prime numbers.
-			while ((sizeof($nextP) < $count) and ($number <= 100000)) {
+			while ((sizeof($nextP) <= $count) and ($number <= 100000)) {
 
 				if (isPrime($number + 1)) {
 					$nextP[] = $number + 1;
@@ -57,7 +57,7 @@
 		}
 
 
-		function simpleEncrypt($textToEncrypt, $encyptionKey, $primes, $maxAllowedASCII = 126) {
+		function simpleEncrypt($textToEncrypt, $encyptionKey, $primes, $minAllowedASCII = 32, $maxAllowedASCII = 126) {
 			// Check if encyptionKey is empty
 			if (!$encyptionKey) {
 				throw new Exception('No Encyption Key');
@@ -75,20 +75,21 @@
 			$encryptedText = '';
 			for ($i = 0; $i < strlen($textToEncrypt); $i++){
 
-				$n = $i + ord(strval(substr($encyptionKey, $i % strlen($encyptionKey), 1)));
-
-				$n = $primes[$n] + $i + ord($encryptedText[$i]);
-				$n = $n % $maxAllowedASCII;
+				$n = $i + ord(substr($encyptionKey, $i % strlen($encyptionKey), 1));
 				
-				$encryptedText = $encryptedText . $n;
+				$n = $primes[$n] + $i + ord($textToEncrypt[$i]);
+
+				$n = ($n % ($maxAllowedASCII - 1)) + $minAllowedASCII;
+
+				$encryptedText = $encryptedText . chr($n);
 			}
 
 			return $encryptedText;
 		};
 	?>
 	<div class="encrypted_text"><?php
-	$text = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.";
-	$key = 'What is Lorem Ipsum?';
+	$text = "Hello, my name is John. How are you today?";
+	$key = 'SUPERMAN';
 	echo 'Text: '.$text;
 	echo "<br>";
 	echo 'Key: '.$key;
@@ -98,7 +99,8 @@
 		 $key,
 		 nextPrimes(1)
 	); 
-	
+	echo "<br>";
+echo chr(32);
 	?></div>
 </body>
 </html>
